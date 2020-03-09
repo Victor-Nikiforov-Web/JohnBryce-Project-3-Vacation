@@ -1,0 +1,22 @@
+.layout {
+    height: 100%;
+    box-sizing: border-box;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("/assets/images/2.jpg");
+    overflow: auto;
+
+}
+.layout > * {
+    box-sizing: border-box;
+}
+.layout > main {
+    margin-top: 20px;
+}
+.layout > footer {
+    background-color: #25291C;
+}
+
+

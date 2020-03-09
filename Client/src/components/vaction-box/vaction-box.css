@@ -1,0 +1,44 @@
+.vacationBox .MuiTypography-body2 {
+    border-bottom: 1px solid #ADA296;
+    border-top: 1px solid #ADA296;
+    overflow: auto;
+    max-height: 70px;
+}
+.vacationBox .root {
+    max-width: 360px;
+}
+.vacationBox .media{
+    height: 140px;
+}
+.vacationBox .MuiTypography-h5{
+    color:#0D324D
+}
+
+.vacationBox ::-webkit-scrollbar {
+    width: 10px;
+}
+
+.vacationBox ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.vacationBox ::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.vacationBox ::-webkit-scrollbar-thumb:hover {
+    background: #88A2AA;
+}
+
+.vacationBox #date {
+    border-bottom: 1px solid #ADA296;
+}
+.vacationBox #price {
+    color:#0D324D;
+    font-size:20px;
+}
+
+.vacationBox button {
+    margin-left: auto;
+    margin-right: auto;
+}

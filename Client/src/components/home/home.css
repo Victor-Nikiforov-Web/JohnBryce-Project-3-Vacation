@@ -1,0 +1,7 @@
+.home {
+    margin-top:15px;
+    display: inline-flex;
+}
+.home .vacationBox {
+    margin-right: 25px;
+}

@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css?family=Abel|Roboto+Condensed&display=swap');
+
+.header>.navbar {
+    display: inline-flex;
+}
+    
+#textLogo {
+    font-family: 'Abel', sans-serif;
+    color: #88A2AA;
+    font-weight: 900;
+    box-shadow: 1px 20px 20px 8px #f1f1f194;
+    text-shadow: -5px 3px 3px #312d2d7a;
+    border: 10px solid #d4d3d373;
+}
+.header p {
+    font-family: 'Roboto Condensed', sans-serif;
+    color :#FFF1D0;
+    font-size: 25px;
+    font-weight: 400;
+    padding: 0;
+    margin: 0;
+}
+.header .welcomeMsg {
+    margin-top: 10px;
+}
+.header a {
+    text-decoration: none;
+}
+.header .navlinks {
+    text-align: left;
+    margin-top:10px;
+}
+.header .navlinks a {
+    color: white;
+    margin: 15px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+}
+.header .navlinks a:hover {
+border-bottom: 1px solid white;
+}
+
+.header input {
+    color:white;
+    font-family: 'Roboto Condensed', sans-serif;
+}

@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Abel&display=swap');
+
+.registerPage input {
+    background-color: aliceblue;
+}
+
+.registerPage form {
+    display: inline-grid;
+}
+
+.registerPage label {
+    margin: 10px;
+    display: flex;
+}
+
+.registerPage #error {
+    background-color: #F71735;
+}
+
+.registerPage {
+    background-color: #011627;
+    padding: 15px;
+    margin-top: 20px;
+    color: white;
+    font-family: 'Abel', sans-serif;
+    font-size:22px;
+}
+.registerPage p {
+    margin:0;
+    margin-top:5px
+}
