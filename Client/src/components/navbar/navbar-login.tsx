@@ -7,10 +7,13 @@ import { store } from "../../redux/store";
 import { Action } from "../../redux/action";
 import { ActionType } from "../../redux/action-type";
 import { Unsubscribe } from "redux";
+import { VacationModel } from '../../models/vacation-model';
+import { NavLink } from 'react-router-dom';
 
 interface NavBarLoginState {
     user: UserModel;
     isLogin: boolean;
+    followedVacations: VacationModel[];
 }
 export class NavBarLogin extends Component<any, NavBarLoginState> {
     private unsubscribeStore: Unsubscribe;
@@ -19,14 +22,23 @@ export class NavBarLogin extends Component<any, NavBarLoginState> {
         super(props);
         this.state = {
             user: store.getState().user,
-            isLogin: store.getState().isLogin
+            isLogin: store.getState().isLogin,
+            followedVacations: store.getState().followedVacations
         };
         this.unsubscribeStore = store.subscribe(() => {
             this.setState({ user: store.getState().user });
             this.setState({ isLogin: store.getState().isLogin });
+            this.setState({ followedVacations: store.getState().followedVacations });
         });
     }
     private logout = () => {
+
+        const action: Action = {
+            type: ActionType.getFollowedVacations,
+            payload: []
+        };
+        store.dispatch(action);
+
         const actionUser: Action = {
             type: ActionType.getUser,
             payload: new UserModel()
@@ -50,14 +62,13 @@ export class NavBarLogin extends Component<any, NavBarLoginState> {
                 <Grid container spacing={3}>
                     {this.state.user.isAdmin === 1 ?
                         <React.Fragment>
-                            <Grid item xs={6} md={4} className='welcomeMsg'>
+                            <Grid item xs={6} md={5} className='welcomeMsg'>
                                 <p>Hello {this.state.user.firstName} {this.state.user.lastName} !</p>
                             </Grid>
-                            <Grid item xs={6} md={4}>
-                                <Button variant="contained">Manage Vacations</Button>
-                            </Grid>
-                            <Grid item xs={6} md={2}>
-                                <Button variant="contained">Test</Button>
+                            <Grid item xs={6} md={5}>
+                                <NavLink to="/admin-vacations">
+                                <Button variant="contained">Admin Panel</Button>
+                                </NavLink>
                             </Grid>
                         </React.Fragment>
                         :

@@ -18,12 +18,16 @@
 }
 
 .registerPage {
-    background-color: #011627;
-    padding: 15px;
+    background-color: #3f51b5;
+    padding: 30px;
     margin-top: 20px;
     color: white;
     font-family: 'Abel', sans-serif;
     font-size:22px;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 15px;
 }
 .registerPage p {
     margin:0;

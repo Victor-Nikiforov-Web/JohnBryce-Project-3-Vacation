@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css?family=Abel|Roboto+Condensed&display=swap');
+.addVacation {
+    display: inline-grid;
+    background: #3f51b5;
+    padding: 30px;
+    color: white;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 20px;
+    width: 400px;
+    margin-top: 20px;
+    border: 3px solid #39393A;
+}
+.addVacation form {
+    margin-left: auto;
+    margin-right: auto;
+}
+.addVacation input , .addVacation .MuiInputBase-adornedEnd {
+    background-color: white;
+}
+.addVacation .MuiFilledInput-multiline {
+    background-color: white;
+    overflow: auto;
+}
+
+.addVacation .MuiInputBase-adornedEnd {
+    height: 40px;
+}
+.addVacation .imageUplode {
+    display: none;
+}
+.addVacation .MuiButton-outlined {
+    background-color:white;
+    border:2px solid #39393A;
+}
+
+.addVacation #error {
+    background-color: red;
+}

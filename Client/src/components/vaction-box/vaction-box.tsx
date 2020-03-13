@@ -8,16 +8,21 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/RemoveCircleOutline';
 //redux
 import { store } from "../../redux/store";
+import { Unsubscribe } from "redux";
 import { Action } from "../../redux/action";
 import { ActionType } from "../../redux/action-type";
-import { Unsubscribe } from "redux";
+
 import { UserModel } from '../../models/user-model';
+import { VacationModel } from '../../models/vacation-model';
 
 interface VactionBoxState {
+    vacations: VacationModel[];
     user: UserModel;
     isLogin: boolean;
+    followedVacations: VacationModel[];
 }
 export class VactionBox extends Component<any, VactionBoxState> {
 
@@ -26,13 +31,17 @@ export class VactionBox extends Component<any, VactionBoxState> {
     public constructor(props: any) {
         super(props);
         this.state = {
+            vacations: store.getState().vacations,
             user: store.getState().user,
-            isLogin: store.getState().isLogin
+            isLogin: store.getState().isLogin,
+            followedVacations: store.getState().followedVacations
         }
 
         this.unsubscribeStore = store.subscribe(() => {
             this.setState({ user: store.getState().user });
+            this.setState({ vacations: store.getState().vacations });
             this.setState({ isLogin: store.getState().isLogin });
+            this.setState({ followedVacations: store.getState().followedVacations });
         });
     }
     public componentWillUnmount = () => {
@@ -59,9 +68,42 @@ export class VactionBox extends Component<any, VactionBoxState> {
         fetch("http://localhost:3000/api/vacations/followVacation", options)
             .then(response => response.json())
             .then(res => {
-                alert('Vacation Added !')
+                this.updateState();
             })
             .catch(err => alert(err));
+    }
+
+    private removeVacation = () => {
+        const vacationID = +this.props.id;
+        const userID = +this.state.user.userID;
+        const options = {
+            method: "DELETE"
+        };
+
+        fetch(`http://localhost:3000/api/vacations/delete/${vacationID}/${userID}`, options)
+            .then(res => {
+                const vacations = [...this.state.vacations]
+                const vacation = vacations.find(v => v.vacationID === this.props.id);
+                vacation.follow = false;
+                this.setState({ vacations });
+                this.updateState();
+
+            })
+            .catch(err => alert(err.message));
+    }
+
+    private updateState = () => {
+        fetch(`http://localhost:3000/api/vacations/get-followed-vacations/${this.state.user.userID}`)
+            .then(res => res.json())
+            .then(followedVacations => {
+                const action: Action = {
+                    type: ActionType.getFollowedVacations,
+                    payload: followedVacations
+                };
+                store.dispatch(action);
+                this.props.update();
+            })
+            .catch(err => console.log(err));
     }
     public render(): JSX.Element {
         return (
@@ -90,10 +132,17 @@ export class VactionBox extends Component<any, VactionBoxState> {
                         </CardContent>
                     </CardActionArea>
                     <CardActions>
-                        <Button size="small" color="primary" onClick={this.followVacation}>
-                            <AddIcon />
-                            Follow this Vacation
+                        {!this.props.follow ?
+                            <Button size="small" color="primary" onClick={this.followVacation}>
+                                <AddIcon />
+                                Follow this vacation
                          </Button>
+                            :
+                            <Button size="small" color="secondary" onClick={this.removeVacation}>
+                                <RemoveIcon />
+                                Unfollow this vacation
+                     </Button>
+                        }
                     </CardActions>
                 </Card>
             </div>

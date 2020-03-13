@@ -15,7 +15,8 @@ async function addUser(user) {
     const sql = `INSERT INTO users(firstName ,lastName ,userName, password ,isAdmin)
     VALUES ('${user.firstName}','${user.lastName}','${user.userName}','${user.password}',false)`;
     const info = await dal.executeAsync(sql);
-    user.id = info.insertID;
+    user.userID = info.insertId;
+    user.isAdmin = false ;
     return user;
 }
 

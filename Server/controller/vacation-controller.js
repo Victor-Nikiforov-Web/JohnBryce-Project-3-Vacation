@@ -30,4 +30,16 @@ router.get('/get-followed-vacations/:id', async (request, response) => {
         response.status(500).send(error);
     }
 });
+
+router.delete('/delete/:vacationID/:userID', async (request, response) => {
+    try {
+        const userID = +request.params.userID;
+        const vacationID = +request.params.vacationID;
+        await vacationLogic.deleteFollowedVacation(userID,vacationID);
+        response.sendStatus(204);
+    } catch (error) {
+        response.status(500).send(error);
+
+    }
+})
 module.exports = router;

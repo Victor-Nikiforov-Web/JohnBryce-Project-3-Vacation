@@ -51,6 +51,7 @@ export class Header extends Component<any, HeaderState> {
                 "Authorization": "Bearer " + localStorage.getItem('token')
             }
         };
+        // check JWT token
         fetch("http://localhost:3000/api/login/login-check", options)
             .then(response => response.json())
             .then(res => {

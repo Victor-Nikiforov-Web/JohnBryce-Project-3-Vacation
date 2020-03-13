@@ -12,21 +12,21 @@ async function followVacation(data) {
     return vacation;
 }
 
-async function unFollowedVacation(data) {
-    const sql = `SELECT * FROM savedvacations WHERE userID = ${data.user} and vacationID = ${data.vacation} `;
-    const unFollowedVacation = await dal.executeAsync(sql);
-}
-
 async function getFollowedVacations(userID) {
-    const sql = `select * from savedvacations 
+    const sql = `SELECT vacationID FROM savedvacations 
     where ${userID} = userID`;
     const vacations = await dal.executeAsync(sql);
     return vacations;
 }
 
+async function deleteFollowedVacation(userID, vacationID) {
+    const sql = `DELETE FROM savedvacations WHERE userID = ${userID} and vacationID = ${vacationID}`;
+    await dal.executeAsync(sql);
+}
+
 module.exports = {
     getAllVacations,
     followVacation,
-    unFollowedVacation ,
-    getFollowedVacations
+    getFollowedVacations,
+    deleteFollowedVacation
 }
