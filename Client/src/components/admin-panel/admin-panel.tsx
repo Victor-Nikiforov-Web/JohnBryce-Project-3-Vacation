@@ -32,10 +32,9 @@ export class AdminPanel extends Component<any, AdminPanelState> {
         this.unsubscribeStore = store.subscribe(() => {
             this.setState({ user: store.getState().user });
             this.setState({ vacations: store.getState().vacations });
-
         });
     }
-    public componentDidUpdate = () => {
+    public componentDidMount = () => {
         if (store.getState().vacations.length === 0) {
             fetch('http://localhost:3000/api/vacations')
                 .then(res => res.json())
@@ -53,43 +52,72 @@ export class AdminPanel extends Component<any, AdminPanelState> {
     public componentWillUnmount = () => {
         this.unsubscribeStore();
     }
+    private deleteVacation = (id: number) => {
+        const answer = window.confirm("Are you sure?");
+        if (!answer) {
+            return;
+        }
+
+        const options = {
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            }
+        };
+
+        fetch(`http://localhost:3000/api/vacations/delete-vacation/${id}`, options)
+            .then(() => {
+                alert("Vacation has been successfully deleted.");
+                const action: Action = {
+                    type: ActionType.deleteVacation,
+                    payload: id
+                };
+                store.dispatch(action);
+            })
+            .catch(err => alert(err.message));
+    }
+
     public render(): JSX.Element {
         return (
             <div className='adminPanel'>
-                <Button variant="contained" color="primary">
-                    <AddIcon />
-                    <NavLink to='/add-vacation' exact>Add Vacation</NavLink>
-                </Button>
-                <Button variant="contained" color="primary">
-                    <EqualizerIcon />
-                    Reports
-                    </Button>
                 {!this.state.user.isAdmin ? <PageNotFound /> :
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>destination</th>
-                                <th>Price</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.vacations.map(v =>
-                                <tr key={v.vacationID}>
-                                    <td>{v.vacationID}</td>
-                                    <td>{v.destination}</td>
-                                    <td>{v.price} $</td>
-                                    <td>
-                                        <EditIcon />
-                                    </td>
-                                    <td>
-                                        <RemoveIcon />
-                                    </td>
-                                </tr>)}
-                        </tbody>
-                    </table>
+                    <React.Fragment>
+                        <Button variant="contained" color="primary">
+                            <AddIcon />
+                            <NavLink to='/add-vacation' exact>Add Vacation</NavLink>
+                        </Button>
+                        <Button variant="contained" color="primary">
+                            <EqualizerIcon />
+                            Reports
+                </Button>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>destination</th>
+                                    <th>Price</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.vacations.map(v =>
+                                    <tr key={v.vacationID}>
+                                        <td>{v.vacationID}</td>
+                                        <td>{v.destination}</td>
+                                        <td>{v.price} $</td>
+                                        <td>
+                                            <NavLink to={`/edit-vacation/${v.vacationID}`} exact>
+                                                <EditIcon />
+                                            </NavLink>
+                                        </td>
+                                        <td>
+                                            <RemoveIcon onClick={() => this.deleteVacation(v.vacationID)} />
+                                        </td>
+                                    </tr>)}
+                            </tbody>
+                        </table>
+                    </React.Fragment>
                 }
             </div>
         );

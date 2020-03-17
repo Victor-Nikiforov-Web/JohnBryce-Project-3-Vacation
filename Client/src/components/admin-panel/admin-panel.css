@@ -27,7 +27,9 @@
     background-color: white;
     color: black;
 }
-
+.adminPanel td > a {
+    color:black;
+}
 .adminPanel td:hover {
     background-color: #63B0CD;
 }

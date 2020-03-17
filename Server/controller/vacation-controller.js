@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const vacationLogic = require('../business-logic/vacation-logic');
+const jwtLogic = require('../business-logic/jwt-logic');
+const jwt = require('jsonwebtoken');
 
 router.get('/', async (request, response) => {
     try {
@@ -8,6 +10,17 @@ router.get('/', async (request, response) => {
         response.json(vacations);
     } catch (error) {
         response.status(500).send(error);
+    }
+});
+
+router.get('/:id', async (request, response) => {
+    try {
+        const id = +request.params.id;
+        const vacation = await vacationLogic.getOneVacation(id);
+        response.json(vacation[0]);
+    } catch (error) {
+        response.status(500).send(error);
+
     }
 });
 
@@ -30,16 +43,68 @@ router.get('/get-followed-vacations/:id', async (request, response) => {
         response.status(500).send(error);
     }
 });
-
+// remove followed vacation
 router.delete('/delete/:vacationID/:userID', async (request, response) => {
     try {
         const userID = +request.params.userID;
         const vacationID = +request.params.vacationID;
-        await vacationLogic.deleteFollowedVacation(userID,vacationID);
+        await vacationLogic.deleteFollowedVacation(userID, vacationID);
         response.sendStatus(204);
     } catch (error) {
         response.status(500).send(error);
 
     }
+});
+
+router.post('/new-vacation', jwtLogic.verifyToken, async (request, response) => {
+    try {
+        jwt.verify(request.token, 'secretkey', (err, authData) => {
+            if (authData.user.isAdmin !== 1) {
+                throw "Error !"
+            }
+        });
+        const vacation = request.body;
+        const newVacation = await vacationLogic.addNewVacation(vacation);
+        response.status(201).json(newVacation);
+    } catch (error) {
+        response.status(500).send(error);
+    }
+});
+
+router.delete('/delete-vacation/:id', jwtLogic.verifyToken, async (request, response) => {
+    try {
+        jwt.verify(request.token, 'secretkey', (err, authData) => {
+            if (authData.user.isAdmin !== 1) {
+                throw "Error !"
+            }
+        });
+        const id = +request.params.id;
+        await vacationLogic.deleteVacation(id);
+        response.sendStatus(204);
+    } catch (error) {
+        response.status(500).send(error);
+    }
+});
+
+router.put('/update-vacation' , jwtLogic.verifyToken , async (request,response) => {
+    try {
+        jwt.verify(request.token, 'secretkey', (err, authData) => {
+            if (authData.user.isAdmin !== 1) {
+                throw "Error !"
+            }
+        });
+        const vacation = request.body;
+        const updatedVacation = await vacationLogic.updateVacation(vacation);
+        
+        if(updatedVacation === null) {
+            response.sendStatus(404);
+            return;
+        }
+
+        response.json(updatedVacation);
+    } catch (error) {
+        response.status(500).send(error);
+    }
 })
+
 module.exports = router;

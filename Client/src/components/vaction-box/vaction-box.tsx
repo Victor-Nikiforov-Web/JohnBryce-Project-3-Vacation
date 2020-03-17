@@ -112,7 +112,7 @@ export class VactionBox extends Component<any, VactionBoxState> {
                     <CardActionArea>
                         <CardMedia
                             className='media'
-                            image={`/assets/images/vacations/${this.props.image}.jpg`}
+                            image={`/assets/images/vacations/${this.props.image}`}
                             title="img"
                         />
                         <CardContent>

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const loginLogic = require('../business-logic/login-logic');
 const jwt = require('jsonwebtoken');
+const jwtLogic = require('../business-logic/jwt-logic');
 
 router.post('/', async (request, response) => {
     try {
@@ -17,7 +18,7 @@ router.post('/', async (request, response) => {
 });
 
 
-router.get('/login-check', verifyToken, (req, res) => {
+router.get('/login-check', jwtLogic.verifyToken , (req, res) => {
     jwt.verify(req.token, 'secretkey', (err, authData) => {
         if (err) {
             res.json(err);
@@ -33,15 +34,5 @@ router.post('/login-save', (req, res) => {
     });
 });
 
-function verifyToken(req, res, next) {
-    const bearerHeader = req.headers['authorization'];
-    if (typeof bearerHeader !== 'undefined') {
-        const bearer = bearerHeader.split(' ');
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next();
-    } else {
-        res.sendStatus(403);
-    }
-}
+
 module.exports = router;

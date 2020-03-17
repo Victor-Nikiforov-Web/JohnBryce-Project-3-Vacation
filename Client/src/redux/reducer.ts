@@ -30,6 +30,20 @@ export function reducer(oldState: AppState, action: Action): AppState {
         case ActionType.getFollowedVacations:
             newState.followedVacations = action.payload;
             break;
+
+        case ActionType.addNewVacation:
+            newState.vacations.push(action.payload);
+            break;
+
+        case ActionType.deleteVacation:
+            const indexToDelete = newState.vacations.findIndex(v => v.vacationID === action.payload);
+            newState.vacations.splice(indexToDelete, 1);
+            break;
+
+        case ActionType.updateVacation:
+            const index = newState.vacations.findIndex(v => v.vacationID === action.payload.vacationID);
+            newState.vacations[index] = action.payload;
+            break;
     }
 
     return newState;

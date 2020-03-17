@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Abel&display=swap');
 
 .registerPage input {
-    background-color: aliceblue;
+    background-color: #ece6e600;
 }
 
 .registerPage form {
@@ -18,16 +18,14 @@
 }
 
 .registerPage {
-    background-color: #3f51b5;
+    display: inline-grid;
+    background: #ffffffbf;
     padding: 30px;
-    margin-top: 20px;
-    color: white;
-    font-family: 'Abel', sans-serif;
-    font-size:22px;
-    width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 15px;
+    color: #39393A;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 20px;
+    width: 400px;
+    border: 3px solid #39393a91;
 }
 .registerPage p {
     margin:0;

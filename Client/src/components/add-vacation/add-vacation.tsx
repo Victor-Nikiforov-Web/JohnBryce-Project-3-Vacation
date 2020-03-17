@@ -45,7 +45,11 @@ export class AddVacation extends Component<any, AddVacationState> {
     }
 
     public componentDidMount = () => {
-
+        const newDate = new Date();
+        const vacation = { ...this.state.vacation };
+        vacation.fromDate = newDate.toString();
+        vacation.toDate = newDate.toString();
+        this.setState({ vacation });
     }
     private updateDestination = (args: SyntheticEvent) => {
         const input = (args.target as HTMLSelectElement);
@@ -65,7 +69,7 @@ export class AddVacation extends Component<any, AddVacationState> {
         const input = (args.target as HTMLSelectElement);
         const description = input.value;
         const vacation = { ...this.state.vacation };
-        if (description.length < 5 || description.length > 300) {
+        if (description.length < 4 || description.length > 300) {
             input.id = 'error';
             vacation.description = undefined;
             this.setState({ vacation });
@@ -84,20 +88,19 @@ export class AddVacation extends Component<any, AddVacationState> {
             this.setState({ vacation });
             return;
         }
-        vacation.fromDate = e;
+        vacation.fromDate = date.toString();
         this.setState({ vacation });
         this.setState({ departingDate: date });
     }
     private updateReturningDate = (date: Date, e: any) => {
         const vacation = { ...this.state.vacation };
-
         if (date === null || date.toString() === 'Invalid Date') {
             this.setState({ returningDate: null });
             vacation.toDate = null;
             this.setState({ vacation });
             return;
         }
-        vacation.toDate = e;
+        vacation.toDate = date.toString();
         this.setState({ vacation });
         this.setState({ returningDate: date });
     }
@@ -105,7 +108,7 @@ export class AddVacation extends Component<any, AddVacationState> {
         const input = (args.target as HTMLSelectElement);
         const price = input.value;
         const vacation = { ...this.state.vacation };
-        if (price.length < 1 || price.length > 6) {
+        if (price.length < 1 || price.length > 6 || isNaN(+price)) {
             input.id = 'error';
             vacation.price = undefined;
             this.setState({ vacation });
@@ -115,110 +118,194 @@ export class AddVacation extends Component<any, AddVacationState> {
         vacation.price = +price;
         this.setState({ vacation });
     }
+    private checkImage = (event: any) => {
+        const image = event.target.files[0];
+        const vacation = { ...this.state.vacation };
+        vacation.image = image;
+        this.setState({ vacation });
+    }
+
+    private uplodeImg = async () => {
+        const vacation = { ...this.state.vacation };
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append('image', vacation.image);
+
+            const optionsImg = {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                },
+                body: formData
+            };
+
+            fetch('http://localhost:3000/api/image-uplode', optionsImg)
+                .then(res => res.json())
+                .then(image => resolve(image))
+                .catch(err => reject(err))
+        });
+    }
+
+    private checkForm = async () => {
+        const vacation = { ...this.state.vacation };
+        // validation
+        if (vacation.fromDate === vacation.toDate) {
+            alert('Departing date cant be the same as returning date');
+            return;
+        }
+        if (!vacation.image) {
+            alert('You need to uplode image !');
+            return;
+        }
+        if (vacation.description === undefined || vacation.destination === undefined ||
+            vacation.fromDate === undefined || vacation.fromDate === null ||
+            vacation.toDate === undefined || vacation.toDate === null || vacation.price === undefined) {
+            alert('please fix all inputs / enter valid values .');
+            return;
+        }
+        await this.uplodeImg()
+            .then(image => {
+                vacation.image = image.toString();
+                this.setState({ vacation });
+                this.sendForm();
+            })
+            .catch(err => alert(err));
+    }
+
+    private sendForm = () => {
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
+            body: JSON.stringify({ ...this.state.vacation })
+        };
+
+        fetch('http://localhost:3000/api/vacations/new-vacation', options)
+            .then(res => res.json())
+            .then(vacation => {
+                const action: Action = {
+                    type: ActionType.addNewVacation,
+                    payload: vacation
+                };
+                store.dispatch(action);
+
+                alert('vacation has been added !');
+                this.props.history.push("/admin-panel");
+            })
+            .catch(err => alert(err));
+    }
     public render(): JSX.Element {
         return (
             <div className='addVacation'>
-                <form>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p>destination :</p>
-                                </td>
-                                <td>
-                                    <TextField label="destination" variant="filled"
-                                        onChange={this.updateDestination} />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p>description : </p>
-                                </td>
-                                <td>
-                                    <TextField
-                                        id="filled-textarea"
-                                        label="description"
-                                        multiline
-                                        variant="filled"
-                                        onChange={this.updateDescription}
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p>Departing : </p>
-                                </td>
-                                <td>
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <Grid container justify="space-around">
-                                            <KeyboardDatePicker
-                                                margin="normal"
-                                                label="Date picker dialog"
-                                                format="dd/MM/yyyy"
-                                                value={this.state.departingDate}
-                                                onChange={this.updateDepartingDate}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                            />
-                                        </Grid>
-                                    </MuiPickersUtilsProvider>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p>Returning : </p>
-                                </td>
-                                <td>
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <Grid container justify="space-around">
-                                            <KeyboardDatePicker
-                                                margin="normal"
-                                                label="Date picker dialog"
-                                                format="dd/MM/yyyy"
-                                                value={this.state.returningDate}
-                                                onChange={this.updateReturningDate}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                            />
-                                        </Grid>
-                                    </MuiPickersUtilsProvider>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p>Price : </p>
-                                </td>
-                                <td>
-                                    <TextField label="price" variant="filled" onChange={this.updatePrice} />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p>Upload image</p>
-                                </td>
-                                <td>
-                                    <input
-                                        accept="image/*"
-                                        className="imageUplode"
-                                        id="outlined-button-file"
-                                        multiple
-                                        type="file"
-                                    />
-                                    <label htmlFor="outlined-button-file">
-                                        <Button variant="outlined" component="span">
-                                            Upload
-                                           </Button>
-                                    </label>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <Button variant="contained" color="secondary">
-                        Add Vacation
-                    </Button>
-                </form>
+                {this.state.user.isAdmin ?
+                    <form>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p>destination :</p>
+                                    </td>
+                                    <td>
+                                        <TextField label="destination" variant="filled"
+                                            onChange={this.updateDestination} />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>description : </p>
+                                    </td>
+                                    <td>
+                                        <TextField
+                                            id="filled-textarea"
+                                            label="description"
+                                            multiline
+                                            variant="filled"
+                                            onChange={this.updateDescription}
+                                        />
+                                    </td>
+                                </tr>                            
+                                <tr>
+                                    <td>
+                                        <p>Departing : </p>
+                                    </td>
+                                    <td>
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <Grid container justify="space-around">
+                                                <KeyboardDatePicker
+                                                    margin="normal"
+                                                    label="Date picker dialog"
+                                                    format="dd/MM/yyyy"
+                                                    value={this.state.departingDate}
+                                                    onChange={this.updateDepartingDate}
+                                                    KeyboardButtonProps={{
+                                                        'aria-label': 'change date',
+                                                    }}
+                                                />
+                                            </Grid>
+                                        </MuiPickersUtilsProvider>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>Returning : </p>
+                                    </td>
+                                    <td>
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <Grid container justify="space-around">
+                                                <KeyboardDatePicker
+                                                    margin="normal"
+                                                    label="Date picker dialog"
+                                                    format="dd/MM/yyyy"
+                                                    value={this.state.returningDate}
+                                                    onChange={this.updateReturningDate}
+                                                    KeyboardButtonProps={{
+                                                        'aria-label': 'change date',
+                                                    }}
+                                                />
+                                            </Grid>
+                                        </MuiPickersUtilsProvider>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>Price : </p>
+                                    </td>
+                                    <td>
+                                        <TextField label="price" variant="filled" onChange={this.updatePrice} />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>Upload image</p>
+                                    </td>
+                                    <td>
+                                        <input
+                                            accept="image/*"
+                                            className="imageUplode"
+                                            id="outlined-button-file"
+                                            multiple
+                                            type="file"
+                                            name="imageToUplode"
+                                            onChange={this.checkImage}
+                                        />
+                                        <label htmlFor="outlined-button-file">
+                                            <Button variant="outlined" component="span">
+                                                Upload
+                                             </Button>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr/>
+                        <Button variant="contained" color="secondary" onClick={this.checkForm}>
+                            Add Vacation
+                      </Button>
+                    </form>
+                    : <PageNotFound />}
             </div >
         );
     }

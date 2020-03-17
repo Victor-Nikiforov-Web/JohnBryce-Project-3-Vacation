@@ -66,7 +66,7 @@ export class NavBarLogin extends Component<any, NavBarLoginState> {
                                 <p>Hello {this.state.user.firstName} {this.state.user.lastName} !</p>
                             </Grid>
                             <Grid item xs={6} md={5}>
-                                <NavLink to="/admin-vacations">
+                                <NavLink to="/admin-panel">
                                 <Button variant="contained">Admin Panel</Button>
                                 </NavLink>
                             </Grid>

@@ -92,7 +92,7 @@ export class RegisterPage extends Component<any, RegisterState> {
 
     private sendForm = () => {
         // check if from valid
-        const user = this.state.user
+        const user = this.state.user;
         if (user.firstName === undefined || user.lastName === undefined || user.userName === undefined ||
             user.password === undefined) {
             alert('please fix the red / empty inputs !');
@@ -193,7 +193,7 @@ export class RegisterPage extends Component<any, RegisterState> {
                                 helperText="Type between 4-30 characters"
                             />
                         </label>
-                        <Button variant="contained" onClick={this.sendForm}>Register !</Button>
+                        <Button variant="contained" color="secondary" onClick={this.sendForm}>Register !</Button>
                     </form>
                     :
                     <PageNotFound />}

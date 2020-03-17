@@ -2,5 +2,8 @@ export enum ActionType {
     getUser,
     updateIsLogin,
     getAllVacations,
-    getFollowedVacations
+    getFollowedVacations,
+    addNewVacation,
+    deleteVacation,
+    updateVacation
 }
