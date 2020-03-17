@@ -22,6 +22,7 @@ interface AddVacationState {
     user: UserModel;
     departingDate: Date;
     returningDate: Date;
+    imgToDisplay: string;
 }
 export class EditVacation extends Component<any, AddVacationState> {
     private unsubscribeStore: Unsubscribe;
@@ -29,6 +30,7 @@ export class EditVacation extends Component<any, AddVacationState> {
     public constructor(props: any) {
         super(props);
         this.state = {
+            imgToDisplay: '',
             user: store.getState().user,
             vacation: new VacationModel(),
             departingDate: new Date(),
@@ -48,7 +50,10 @@ export class EditVacation extends Component<any, AddVacationState> {
         const id = this.props.match.params.id;
         fetch(`http://localhost:3000/api/vacations/${id}`)
             .then(res => res.json())
-            .then(vacation => this.setState({ vacation }))
+            .then(vacation => {
+                this.setState({ vacation })
+                this.setState({ imgToDisplay: vacation.image });
+            })
             .catch(err => alert(err));
     }
     private updateDestination = (args: SyntheticEvent) => {
@@ -91,7 +96,6 @@ export class EditVacation extends Component<any, AddVacationState> {
     }
     private updatePrice = (args: SyntheticEvent) => {
         const input = (args.target as HTMLSelectElement);
-        console.log(input)
         const price = input.value;
         const vacation = { ...this.state.vacation };
         if (price.length < 1 || price.length > 6 || isNaN(+price)) {
@@ -105,10 +109,7 @@ export class EditVacation extends Component<any, AddVacationState> {
         this.setState({ vacation });
     }
     private checkImage = (event: any) => {
-
         const image = event.target.files[0];
-        console.log(typeof image)
-        console.log('y')
         const vacation = { ...this.state.vacation };
         vacation.image = image;
         this.setState({ vacation });
@@ -153,7 +154,6 @@ export class EditVacation extends Component<any, AddVacationState> {
             return;
         }
         if (typeof vacation.image !== typeof "") {
-            console.log('x')
             await this.uplodeImg()
                 .then(image => {
                     vacation.image = image.toString();
@@ -186,7 +186,7 @@ export class EditVacation extends Component<any, AddVacationState> {
                 };
                 store.dispatch(action);
 
-                alert('vacation has been added !');
+                alert('vacation has been updated !');
                 this.props.history.push("/admin-panel");
             })
             .catch(err => alert(err));
@@ -206,22 +206,18 @@ export class EditVacation extends Component<any, AddVacationState> {
                                         <TextField value={this.state.vacation.destination || ''} variant="filled"
                                             onChange={this.updateDestination} />
                                     </td>
-                                </tr>
-                                <tr>
                                     <td>
                                         <p>description : </p>
                                     </td>
                                     <td>
                                         <TextField
                                             value={this.state.vacation.description || ''}
-                                            id="filled-textarea"
-                                            label="description"
                                             multiline
-                                            variant="filled"
                                             onChange={this.updateDescription}
                                         />
                                     </td>
                                 </tr>
+                            
                                 <tr>
                                     <td>
                                         <p>Departing : </p>
@@ -231,7 +227,6 @@ export class EditVacation extends Component<any, AddVacationState> {
                                             <Grid container justify="space-around">
                                                 <KeyboardDatePicker
                                                     margin="normal"
-                                                    label="Date picker dialog"
                                                     format="dd/MM/yyyy"
                                                     value={this.state.vacation.fromDate}
                                                     onChange={this.updateDepartingDate}
@@ -242,8 +237,6 @@ export class EditVacation extends Component<any, AddVacationState> {
                                             </Grid>
                                         </MuiPickersUtilsProvider>
                                     </td>
-                                </tr>
-                                <tr>
                                     <td>
                                         <p>Returning : </p>
                                     </td>
@@ -252,7 +245,6 @@ export class EditVacation extends Component<any, AddVacationState> {
                                             <Grid container justify="space-around">
                                                 <KeyboardDatePicker
                                                     margin="normal"
-                                                    label="Date picker dialog"
                                                     format="dd/MM/yyyy"
                                                     value={this.state.vacation.toDate}
                                                     onChange={this.updateReturningDate}
@@ -272,14 +264,14 @@ export class EditVacation extends Component<any, AddVacationState> {
                                         <TextField label="price" value={this.state.vacation.price || ''}
                                             variant="filled" onChange={this.updatePrice} />
                                     </td>
-                                </tr>
-                                <tr>
                                     <td>
-                                        <p>Image</p>
+                                        <p>Image : </p>
                                     </td>
-                                    <td><img src={`/assets/images/vacations/${this.state.vacation.image}`} alt='old' /></td>
+                                    <td><img src={`/assets/images/vacations/${this.state.imgToDisplay}`} alt='old' /></td>
                                 </tr>
                                 <tr>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td>
                                         <input
@@ -301,11 +293,15 @@ export class EditVacation extends Component<any, AddVacationState> {
                             </tbody>
                         </table>
                         <hr />
+                        <Button variant="contained" color="primary" onClick={() => this.props.history.push("/admin-panel")}>
+                            Cancel
+                        </Button>
                         <Button variant="contained" color="secondary" onClick={this.checkForm}>
-                            Add Vacation
+                            Update Vacation
                       </Button>
                     </form>
-                    : <PageNotFound />}
+                    : <PageNotFound />
+                }
             </div >
         );
     }

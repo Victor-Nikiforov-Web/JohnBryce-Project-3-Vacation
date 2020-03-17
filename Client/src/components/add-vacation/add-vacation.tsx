@@ -209,24 +209,21 @@ export class AddVacation extends Component<any, AddVacationState> {
                                         <p>destination :</p>
                                     </td>
                                     <td>
-                                        <TextField label="destination" variant="filled"
+                                        <TextField variant="filled"
                                             onChange={this.updateDestination} />
                                     </td>
-                                </tr>
-                                <tr>
                                     <td>
                                         <p>description : </p>
                                     </td>
                                     <td>
                                         <TextField
                                             id="filled-textarea"
-                                            label="description"
                                             multiline
                                             variant="filled"
                                             onChange={this.updateDescription}
                                         />
                                     </td>
-                                </tr>                            
+                                </tr>
                                 <tr>
                                     <td>
                                         <p>Departing : </p>
@@ -236,7 +233,6 @@ export class AddVacation extends Component<any, AddVacationState> {
                                             <Grid container justify="space-around">
                                                 <KeyboardDatePicker
                                                     margin="normal"
-                                                    label="Date picker dialog"
                                                     format="dd/MM/yyyy"
                                                     value={this.state.departingDate}
                                                     onChange={this.updateDepartingDate}
@@ -247,8 +243,6 @@ export class AddVacation extends Component<any, AddVacationState> {
                                             </Grid>
                                         </MuiPickersUtilsProvider>
                                     </td>
-                                </tr>
-                                <tr>
                                     <td>
                                         <p>Returning : </p>
                                     </td>
@@ -257,7 +251,6 @@ export class AddVacation extends Component<any, AddVacationState> {
                                             <Grid container justify="space-around">
                                                 <KeyboardDatePicker
                                                     margin="normal"
-                                                    label="Date picker dialog"
                                                     format="dd/MM/yyyy"
                                                     value={this.state.returningDate}
                                                     onChange={this.updateReturningDate}
@@ -276,8 +269,6 @@ export class AddVacation extends Component<any, AddVacationState> {
                                     <td>
                                         <TextField label="price" variant="filled" onChange={this.updatePrice} />
                                     </td>
-                                </tr>
-                                <tr>
                                     <td>
                                         <p>Upload image</p>
                                     </td>
@@ -300,7 +291,10 @@ export class AddVacation extends Component<any, AddVacationState> {
                                 </tr>
                             </tbody>
                         </table>
-                        <hr/>
+                        <hr />
+                        <Button variant="contained" color="primary" onClick={() => this.props.history.push("/admin-panel")}>
+                            Cancel
+                        </Button>
                         <Button variant="contained" color="secondary" onClick={this.checkForm}>
                             Add Vacation
                       </Button>

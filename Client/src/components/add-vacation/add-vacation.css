@@ -1,28 +1,33 @@
 @import url('https://fonts.googleapis.com/css?family=Abel|Roboto+Condensed&display=swap');
 .addVacation {
+    margin-top: 20px;
     display: inline-grid;
     background: #ffffffbf;
     padding: 30px;
     color: #39393A;
     font-family: 'Roboto Condensed', sans-serif;
     font-size: 20px;
-    width: 400px;
     border: 3px solid #39393a91;
-}
-hr{
-    border: 1px solid #00000029;
-}
-.addVacation .MuiInputBase-input{
-    height: 5px;
-}
-
-.addVacation form {
     margin-left: auto;
     margin-right: auto;
 }
-.addVacation input , .addVacation .MuiInputBase-adornedEnd {
+
+hr {
+    border: 1px solid #00000029;
+}
+
+.addVacation .MuiInputBase-input {
+    height: 5px;
+}
+
+.addVacation button {
+    margin-left: 20px;
+}
+
+.addVacation input, .addVacation .MuiInputBase-adornedEnd {
     background-color: #ece6e600;
 }
+
 .addVacation .MuiFilledInput-multiline {
     background-color: #ece6e600;
     overflow: auto;
@@ -31,14 +36,21 @@ hr{
 .addVacation .MuiInputBase-adornedEnd {
     height: 30px;
 }
+
 .addVacation .imageUplode {
     display: none;
 }
+
 .addVacation .MuiButton-outlined {
-    background-color:white;
-    border:2px solid #39393A;
+    background-color: white;
+    border: 2px solid #39393A;
 }
 
 .addVacation #error {
     background-color: red;
+}
+.addVacation .MuiInputBase-inputMultiline {
+    height: 100px!important;
+    width: 250px!important;
+    overflow: auto!important;
 }
