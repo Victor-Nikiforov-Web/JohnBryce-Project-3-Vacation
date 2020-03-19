@@ -46,7 +46,6 @@ async function deleteVacation(id) {
 }
 
 async function updateVacation(vacation) {
-    console.log(vacation)
     const sql = `
         UPDATE vacations SET
         destination = '${vacation.destination}',
@@ -59,6 +58,14 @@ async function updateVacation(vacation) {
     const info = await dal.executeAsync(sql);
     return info.affectedRows === 0 ? null : vacation;
 }
+
+async function getAllFollowedVacations() {
+    console.log('xxx')
+    const sql = 'SELECT * FROM savedvacations';
+    const vacations = await dal.executeAsync(sql);
+    return vacations;
+}
+
 function fixDateFormat(date) {
     const newDate = new Date(date);
     const year = newDate.getFullYear();
@@ -74,5 +81,6 @@ module.exports = {
     addNewVacation,
     deleteVacation,
     getOneVacation,
-    updateVacation
+    updateVacation,
+    getAllFollowedVacations
 }

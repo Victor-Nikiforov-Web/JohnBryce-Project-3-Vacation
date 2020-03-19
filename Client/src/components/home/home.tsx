@@ -82,7 +82,7 @@ export class Home extends Component<any, HomeState> {
                     store.dispatch(action);
                     this.arrangeVacations();
                 })
-                .catch(err => console.log(err));
+                .catch(err => alert(err));
         }
     }
     private arrangeVacations = () => {

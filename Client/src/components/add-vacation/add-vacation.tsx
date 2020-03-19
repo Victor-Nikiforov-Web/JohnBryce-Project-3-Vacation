@@ -51,6 +51,7 @@ export class AddVacation extends Component<any, AddVacationState> {
         vacation.toDate = newDate.toString();
         this.setState({ vacation });
     }
+
     private updateDestination = (args: SyntheticEvent) => {
         const input = (args.target as HTMLSelectElement);
         const destination = input.value;
@@ -149,6 +150,10 @@ export class AddVacation extends Component<any, AddVacationState> {
     private checkForm = async () => {
         const vacation = { ...this.state.vacation };
         // validation
+        if(vacation.fromDate > vacation.toDate){
+            alert('Returning date cannot be before departing !');
+            return;
+        }
         if (vacation.fromDate === vacation.toDate) {
             alert('Departing date cant be the same as returning date');
             return;
@@ -210,7 +215,9 @@ export class AddVacation extends Component<any, AddVacationState> {
                                     </td>
                                     <td>
                                         <TextField variant="filled"
-                                            onChange={this.updateDestination} />
+                                            onChange={this.updateDestination}
+                                            helperText="Type between 3-50 characters"
+                                        />
                                     </td>
                                     <td>
                                         <p>description : </p>
@@ -220,6 +227,7 @@ export class AddVacation extends Component<any, AddVacationState> {
                                             id="filled-textarea"
                                             multiline
                                             variant="filled"
+                                            helperText="Type between 4-300 characters"
                                             onChange={this.updateDescription}
                                         />
                                     </td>
@@ -267,7 +275,9 @@ export class AddVacation extends Component<any, AddVacationState> {
                                         <p>Price : </p>
                                     </td>
                                     <td>
-                                        <TextField label="price" variant="filled" onChange={this.updatePrice} />
+                                        <TextField label="price" variant="filled"
+                                            helperText="Type between 1-6 characters"
+                                            onChange={this.updatePrice} />
                                     </td>
                                     <td>
                                         <p>Upload image</p>

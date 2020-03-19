@@ -52,7 +52,7 @@ export class AdminPanel extends Component<any, AdminPanelState> {
     public componentWillUnmount = () => {
         this.unsubscribeStore();
     }
-    private deleteVacation = (id: number) => {
+    private deleteVacation = (vacation: VacationModel) => {
         const answer = window.confirm("Are you sure?");
         if (!answer) {
             return;
@@ -61,16 +61,19 @@ export class AdminPanel extends Component<any, AdminPanelState> {
         const options = {
             method: "DELETE",
             headers: {
-                "Authorization": "Bearer " + localStorage.getItem('token')
-            }
+                "Authorization": "Bearer " + localStorage.getItem('token'),
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(vacation)
         };
 
-        fetch(`http://localhost:3000/api/vacations/delete-vacation/${id}`, options)
+        fetch(`http://localhost:3000/api/vacations/delete-vacation`, options)
             .then(() => {
                 alert("Vacation has been successfully deleted.");
                 const action: Action = {
                     type: ActionType.deleteVacation,
-                    payload: id
+                    payload: vacation.vacationID
                 };
                 store.dispatch(action);
             })
@@ -88,8 +91,8 @@ export class AdminPanel extends Component<any, AdminPanelState> {
                         </Button>
                         <Button variant="contained" color="primary">
                             <EqualizerIcon />
-                            Reports
-                </Button>
+                            <NavLink to='/chart'>Reports</NavLink>
+                        </Button>
                         <table>
                             <thead>
                                 <tr>
@@ -112,7 +115,7 @@ export class AdminPanel extends Component<any, AdminPanelState> {
                                             </NavLink>
                                         </td>
                                         <td>
-                                            <RemoveIcon onClick={() => this.deleteVacation(v.vacationID)} />
+                                            <RemoveIcon onClick={() => this.deleteVacation(v)} />
                                         </td>
                                     </tr>)}
                             </tbody>

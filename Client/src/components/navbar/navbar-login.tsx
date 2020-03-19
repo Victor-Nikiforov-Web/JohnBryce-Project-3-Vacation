@@ -63,7 +63,7 @@ export class NavBarLogin extends Component<any, NavBarLoginState> {
                     {this.state.user.isAdmin === 1 ?
                         <React.Fragment>
                             <Grid item xs={6} md={5} className='welcomeMsg'>
-                                <p>Hello {this.state.user.firstName} {this.state.user.lastName} !</p>
+                                <p>Welcome {this.state.user.firstName} !</p>
                             </Grid>
                             <Grid item xs={6} md={5}>
                                 <NavLink to="/admin-panel">
@@ -73,7 +73,7 @@ export class NavBarLogin extends Component<any, NavBarLoginState> {
                         </React.Fragment>
                         :
                         <Grid item xs={6} md={10} className='welcomeMsg'>
-                            <p>Hello {this.state.user.firstName} {this.state.user.lastName} !</p>
+                            <p>Welcome {this.state.user.firstName} !</p>
                         </Grid>}
                     <Grid item xs={6} md={2}>
                         <Button variant="contained" color="secondary"

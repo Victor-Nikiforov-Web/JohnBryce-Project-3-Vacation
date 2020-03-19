@@ -60,6 +60,7 @@ export class EditVacation extends Component<any, AddVacationState> {
         const input = (args.target as HTMLSelectElement);
         const destination = input.value;
         const vacation = { ...this.state.vacation };
+        input.id = '';
         vacation.destination = destination;
         this.setState({ vacation });
     }
@@ -139,6 +140,20 @@ export class EditVacation extends Component<any, AddVacationState> {
     private checkForm = async () => {
         const vacation = { ...this.state.vacation };
         // validation
+        if (vacation.destination.length < 3 || vacation.destination.length > 50) {
+            vacation.destination = null;
+            alert('fix destination input');
+            return;
+        }
+        if (vacation.description.length < 4 || vacation.description.length > 300) {
+            vacation.description = null;
+            alert('fix description input');
+            return;
+        }
+        if(vacation.fromDate > vacation.toDate){
+            alert('Returning date cannot be before departing !');
+            return;
+        }
         if (vacation.fromDate === vacation.toDate) {
             alert('Departing date cant be the same as returning date');
             return;
@@ -153,6 +168,7 @@ export class EditVacation extends Component<any, AddVacationState> {
             alert('please fix all inputs / enter valid values .');
             return;
         }
+        // if user uplode new image
         if (typeof vacation.image !== typeof "") {
             await this.uplodeImg()
                 .then(image => {
@@ -163,6 +179,7 @@ export class EditVacation extends Component<any, AddVacationState> {
                 .catch(err => alert(err));
             return;
         }
+        //if not send only form
         this.sendForm();
     }
 
@@ -204,7 +221,9 @@ export class EditVacation extends Component<any, AddVacationState> {
                                     </td>
                                     <td>
                                         <TextField value={this.state.vacation.destination || ''} variant="filled"
-                                            onChange={this.updateDestination} />
+                                            onChange={this.updateDestination}
+                                            helperText="Type between 3-50 characters"
+                                        />
                                     </td>
                                     <td>
                                         <p>description : </p>
@@ -213,11 +232,12 @@ export class EditVacation extends Component<any, AddVacationState> {
                                         <TextField
                                             value={this.state.vacation.description || ''}
                                             multiline
+                                            helperText="Type between 4-300 characters"
                                             onChange={this.updateDescription}
                                         />
                                     </td>
                                 </tr>
-                            
+
                                 <tr>
                                     <td>
                                         <p>Departing : </p>
@@ -262,7 +282,9 @@ export class EditVacation extends Component<any, AddVacationState> {
                                     </td>
                                     <td>
                                         <TextField label="price" value={this.state.vacation.price || ''}
-                                            variant="filled" onChange={this.updatePrice} />
+                                            variant="filled"
+                                            helperText="Type between 1-6 characters"
+                                            onChange={this.updatePrice} />
                                     </td>
                                     <td>
                                         <p>Image : </p>

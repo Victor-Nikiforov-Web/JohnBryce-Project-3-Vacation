@@ -75,7 +75,7 @@ export class Header extends Component<any, HeaderState> {
                 };
                 store.dispatch(actionIsLogin);
             })
-            .catch(err => console.error(err));
+            .catch(err => alert(err));
     }
 
     public render(): JSX.Element {

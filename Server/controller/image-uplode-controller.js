@@ -4,7 +4,6 @@ const uuidv4 = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const jwtLogic = require('../business-logic/jwt-logic');
 
-
 router.post('/', jwtLogic.verifyToken, (request, response) => {
     try {
         if (!request.files) {

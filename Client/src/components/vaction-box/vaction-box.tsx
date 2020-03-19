@@ -103,7 +103,7 @@ export class VactionBox extends Component<any, VactionBoxState> {
                 store.dispatch(action);
                 this.props.update();
             })
-            .catch(err => console.log(err));
+            .catch(err => alert(err));
     }
     public render(): JSX.Element {
         return (
@@ -131,19 +131,21 @@ export class VactionBox extends Component<any, VactionBoxState> {
                         </Typography>
                         </CardContent>
                     </CardActionArea>
-                    <CardActions>
-                        {!this.props.follow ?
-                            <Button size="small" color="primary" onClick={this.followVacation}>
-                                <AddIcon />
-                                Follow this vacation
+                    {this.state.user.isAdmin ? null :
+                        <CardActions>
+                            {!this.props.follow ?
+                                <Button size="small" color="primary" onClick={this.followVacation}>
+                                    <AddIcon />
+                                    Follow this vacation
                          </Button>
-                            :
-                            <Button size="small" color="secondary" onClick={this.removeVacation}>
-                                <RemoveIcon />
-                                Unfollow this vacation
+                                :
+                                <Button size="small" color="secondary" onClick={this.removeVacation}>
+                                    <RemoveIcon />
+                                    Unfollow this vacation
                      </Button>
-                        }
-                    </CardActions>
+                            }
+                        </CardActions>
+                    }
                 </Card>
             </div>
         )
