@@ -88,7 +88,7 @@ export class Header extends Component<any, HeaderState> {
                                 <Grid item xs={12} md={6}>
                                     <div className='navlinks'>
                                         <NavLink to='/' exact>Home</NavLink>
-                                        <NavLink to='/' exact>About</NavLink>
+                                        <NavLink to='/about' exact>About</NavLink>
                                     </div>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
@@ -103,7 +103,7 @@ export class Header extends Component<any, HeaderState> {
                     </AppBar>
                     <Toolbar />
                 </div>
-                <Typography variant='h1' id='textLogo'>Vacations</Typography>
+                <Typography className='logoText' variant='h1'><span>V</span>acations <span>W</span>ebsite</Typography>
             </div>
         );
     }

@@ -109,7 +109,7 @@ router.put('/update-vacation', jwtLogic.verifyToken, async (request, response) =
     }
 });
 
-router.get('/all-followed-vacations', jwtLogic.verifyToken, async (request, response) => {
+router.get('/followed/get-all', jwtLogic.verifyToken, async (request, response) => {
     try {
         jwt.verify(request.token, 'secretkey', (err, authData) => {
             if (authData.user.isAdmin !== 1) {

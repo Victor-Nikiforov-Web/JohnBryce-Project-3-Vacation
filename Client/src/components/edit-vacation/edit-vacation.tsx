@@ -20,8 +20,6 @@ import {
 interface AddVacationState {
     vacation: VacationModel;
     user: UserModel;
-    departingDate: Date;
-    returningDate: Date;
     imgToDisplay: string;
 }
 export class EditVacation extends Component<any, AddVacationState> {
@@ -32,9 +30,7 @@ export class EditVacation extends Component<any, AddVacationState> {
         this.state = {
             imgToDisplay: '',
             user: store.getState().user,
-            vacation: new VacationModel(),
-            departingDate: new Date(),
-            returningDate: new Date()
+            vacation: new VacationModel()
         }
 
         this.unsubscribeStore = store.subscribe(() => {
@@ -51,6 +47,8 @@ export class EditVacation extends Component<any, AddVacationState> {
         fetch(`http://localhost:3000/api/vacations/${id}`)
             .then(res => res.json())
             .then(vacation => {
+                vacation.fromDate = new Date(vacation.fromDate);
+                vacation.toDate = new Date(vacation.toDate);
                 this.setState({ vacation })
                 this.setState({ imgToDisplay: vacation.image });
             })
@@ -74,26 +72,22 @@ export class EditVacation extends Component<any, AddVacationState> {
     private updateDepartingDate = (date: Date, e: any) => {
         const vacation = { ...this.state.vacation };
         if (date === null || date.toString() === 'Invalid Date') {
-            this.setState({ departingDate: null });
             vacation.fromDate = null;
             this.setState({ vacation });
             return;
         }
-        vacation.fromDate = date.toString();
+        vacation.fromDate = date;
         this.setState({ vacation });
-        this.setState({ departingDate: date });
     }
     private updateReturningDate = (date: Date, e: any) => {
         const vacation = { ...this.state.vacation };
         if (date === null || date.toString() === 'Invalid Date') {
-            this.setState({ returningDate: null });
             vacation.toDate = null;
             this.setState({ vacation });
             return;
         }
-        vacation.toDate = date.toString();
+        vacation.toDate = date;
         this.setState({ vacation });
-        this.setState({ returningDate: date });
     }
     private updatePrice = (args: SyntheticEvent) => {
         const input = (args.target as HTMLSelectElement);
@@ -150,7 +144,7 @@ export class EditVacation extends Component<any, AddVacationState> {
             alert('fix description input');
             return;
         }
-        if(vacation.fromDate > vacation.toDate){
+        if (vacation.fromDate > vacation.toDate) {
             alert('Returning date cannot be before departing !');
             return;
         }

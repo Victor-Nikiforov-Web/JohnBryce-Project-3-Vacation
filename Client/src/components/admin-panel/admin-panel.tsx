@@ -35,7 +35,7 @@ export class AdminPanel extends Component<any, AdminPanelState> {
         });
     }
     public componentDidMount = () => {
-        if (store.getState().vacations.length === 0) {
+        if (store.getState().vacations.length < 1) {
             fetch('http://localhost:3000/api/vacations')
                 .then(res => res.json())
                 .then(vacations => {
@@ -46,8 +46,8 @@ export class AdminPanel extends Component<any, AdminPanelState> {
                     store.dispatch(action);
                 })
                 .catch(err => alert(err));
+            }
         }
-    }
 
     public componentWillUnmount = () => {
         this.unsubscribeStore();

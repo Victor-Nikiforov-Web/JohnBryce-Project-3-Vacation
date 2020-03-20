@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2020 at 09:51 AM
+-- Generation Time: Mar 20, 2020 at 01:10 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.2
 
@@ -40,9 +40,17 @@ CREATE TABLE `savedvacations` (
 --
 
 INSERT INTO `savedvacations` (`userID`, `vacationID`) VALUES
-(27, 1),
-(27, 2),
-(27, 6);
+(46, 5),
+(46, 4),
+(47, 6),
+(47, 3),
+(48, 1),
+(48, 2),
+(47, 1),
+(47, 2),
+(47, 4),
+(48, 3),
+(38, 2);
 
 -- --------------------------------------------------------
 
@@ -64,7 +72,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userID`, `firstName`, `lastName`, `userName`, `password`, `isAdmin`) VALUES
-(27, 'victor', 'nick', 'vk220', 'vk111', 0);
+(37, 'Admin', 'Admin', 'Admin', 'admin', 1),
+(38, 'test', 'test', 'test', 'test', 0),
+(46, 'user', 'user', 'user', 'user', 0),
+(47, 'user1', 'user1', 'user1', 'user1', 0),
+(48, 'user2', 'user2', 'user2', 'user2', 0);
 
 -- --------------------------------------------------------
 
@@ -87,12 +99,12 @@ CREATE TABLE `vacations` (
 --
 
 INSERT INTO `vacations` (`vacationID`, `description`, `destination`, `image`, `fromDate`, `toDate`, `price`) VALUES
-(1, 'Set in the heart of Miami Beach in the popular Mid-Beach area, this resort offers a tropical escape amidst all the hustle and bustle. Inspired by nature, this oceanfront sanctuary emphasizes health and total wellness through natural gourmet dining and Aveda spa rituals while green practices and envi', 'Miami: The Palms Hotel', '1', '2020-04-23', '2020-04-30', '450'),
-(2, 'Located just a few miles from the fishing village of Kailua-Kona, this intimate oceanfront one- and two-bedroom condominium resort offers the simplicity and comfort of \"home away from home\".\r\n\r\n', 'Hawaii Island - Aston Kona', '2', '2020-05-13', '2020-05-16', '800'),
-(3, 'Inspired by the vibrant culture of Guanacaste, this eclectic resort boasts a bold design and exemplifies the best of Tico culture. Guests can start the day at Zona Azul Beach Club enjoying the white sands of Playa Conchal and end it experiencing the amazing sunsets in the Living Room imbibing craft ', 'Costa Rica', '3', '2020-06-10', '2020-06-15', '999'),
-(4, 'Set beachfront in the lively hotel zone, this all-inclusive resort features three pools, including one for kids, a selection of restaurants, a kids’ club, and a small, relaxing spa.\r\n\r\n', 'Mexico -Omni Cancun', '4', '2020-05-06', '2020-05-12', '1300'),
-(5, 'If you enjoy eating like royalty, gambling in style and taking in world-class entertainment, this all-suite hotel might be an excellent bet for your next Las Vegas holiday.', 'Las Vegas - The Venetian', '5', '2020-04-26', '2020-04-30', '1800'),
-(6, 'Le Taha’a Island Resort & Spa is accessible by a 35-minute boat ride from the Raiatea airport, and is a five-minute shuttle ride from the main island of Taha’a. Le Taha’a is a member of the exclusive Relais & Châteaux hotel collection. The St. Regis Bora Bora Resort sets a new standard for luxury in', 'Tahiti - Bora Bora ', '6', '2020-07-02', '2020-07-15', '2499');
+(1, 'Set in the heart of Miami Beach in the popular Mid-Beach area, this resort offers a tropical escape amidst all the hustle and bustle. Inspired by nature, this oceanfront sanctuary emphasizes health and total wellness through natural gourmet dining and Aveda spa rituals while green practices and envi', 'Miami: The Palms Hotel', '1.jpg', '2020-04-23', '2020-04-30', '450'),
+(2, 'Located just a few miles from the fishing village of Kailua-Kona, this intimate oceanfront one- and two-bedroom condominium resort offers the simplicity and comfort of \"home away from home\".\r\n\r\n', 'Hawaii Island - Aston Kona', '2.jpg', '2020-05-13', '2020-05-16', '800'),
+(3, 'Inspired by the vibrant culture of Guanacaste, this eclectic resort boasts a bold design and exemplifies the best of Tico culture. Guests can start the day at Zona Azul Beach Club enjoying the white sands of Playa Conchal and end it experiencing the amazing sunsets in the Living Room imbibing craft ', 'Costa Rica', '3.jpg', '2020-06-10', '2020-06-15', '899'),
+(4, 'Set beachfront in the lively hotel zone, this all-inclusive resort features three pools, including one for kids, a selection of restaurants, a kids’ club, and a small, relaxing spa.\r\n\r\n', 'Mexico -Omni Cancun', '4.jpg', '2020-05-06', '2020-05-12', '1300'),
+(5, 'If you enjoy eating like royalty, gambling in style and taking in world-class entertainment, this all-suite hotel might be an excellent bet for your next Las Vegas holiday.', 'Las Vegas - The Venetian', '5.jpg', '2020-04-26', '2020-04-30', '1800'),
+(6, 'Le Taha’a Island Resort & Spa is accessible by a 35-minute boat ride from the Raiatea airport, and is a five-minute shuttle ride from the main island of Taha’a. Le Taha’a is a member of the exclusive Relais & Châteaux hotel collection. The St. Regis Bora Bora Resort sets a new standard for luxury in', 'Tahiti - Bora Bora ', '6.jpg', '2020-07-02', '2020-07-15', '2499');
 
 --
 -- Indexes for dumped tables
@@ -125,13 +137,13 @@ ALTER TABLE `vacations`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `vacations`
 --
 ALTER TABLE `vacations`
-  MODIFY `vacationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `vacationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- Constraints for dumped tables

@@ -20,8 +20,6 @@ import {
 interface AddVacationState {
     vacation: VacationModel;
     user: UserModel;
-    departingDate: Date;
-    returningDate: Date;
 }
 export class AddVacation extends Component<any, AddVacationState> {
     private unsubscribeStore: Unsubscribe;
@@ -30,9 +28,7 @@ export class AddVacation extends Component<any, AddVacationState> {
         super(props);
         this.state = {
             user: store.getState().user,
-            vacation: new VacationModel(),
-            departingDate: new Date(),
-            returningDate: new Date()
+            vacation: new VacationModel()
         }
 
         this.unsubscribeStore = store.subscribe(() => {
@@ -45,10 +41,12 @@ export class AddVacation extends Component<any, AddVacationState> {
     }
 
     public componentDidMount = () => {
-        const newDate = new Date();
         const vacation = { ...this.state.vacation };
-        vacation.fromDate = newDate.toString();
-        vacation.toDate = newDate.toString();
+        //for validation becuase the time the same date when i try to use === return false .
+        const date = new Date();
+        date.setHours(0, 0, 0);
+        vacation.fromDate = date;
+        vacation.toDate = date;
         this.setState({ vacation });
     }
 
@@ -82,28 +80,23 @@ export class AddVacation extends Component<any, AddVacationState> {
     }
     private updateDepartingDate = (date: Date, e: any) => {
         const vacation = { ...this.state.vacation };
-
         if (date === null || date.toString() === 'Invalid Date') {
-            this.setState({ departingDate: null });
             vacation.fromDate = null;
             this.setState({ vacation });
             return;
         }
-        vacation.fromDate = date.toString();
+        vacation.fromDate = date;
         this.setState({ vacation });
-        this.setState({ departingDate: date });
     }
     private updateReturningDate = (date: Date, e: any) => {
         const vacation = { ...this.state.vacation };
         if (date === null || date.toString() === 'Invalid Date') {
-            this.setState({ returningDate: null });
             vacation.toDate = null;
             this.setState({ vacation });
             return;
         }
-        vacation.toDate = date.toString();
+        vacation.toDate = date;
         this.setState({ vacation });
-        this.setState({ returningDate: date });
     }
     private updatePrice = (args: SyntheticEvent) => {
         const input = (args.target as HTMLSelectElement);
@@ -150,7 +143,7 @@ export class AddVacation extends Component<any, AddVacationState> {
     private checkForm = async () => {
         const vacation = { ...this.state.vacation };
         // validation
-        if(vacation.fromDate > vacation.toDate){
+        if (vacation.fromDate > vacation.toDate) {
             alert('Returning date cannot be before departing !');
             return;
         }
@@ -207,6 +200,7 @@ export class AddVacation extends Component<any, AddVacationState> {
             <div className='addVacation'>
                 {this.state.user.isAdmin ?
                     <form>
+
                         <table>
                             <tbody>
                                 <tr>
@@ -242,7 +236,7 @@ export class AddVacation extends Component<any, AddVacationState> {
                                                 <KeyboardDatePicker
                                                     margin="normal"
                                                     format="dd/MM/yyyy"
-                                                    value={this.state.departingDate}
+                                                    value={this.state.vacation.fromDate}
                                                     onChange={this.updateDepartingDate}
                                                     KeyboardButtonProps={{
                                                         'aria-label': 'change date',
@@ -260,7 +254,7 @@ export class AddVacation extends Component<any, AddVacationState> {
                                                 <KeyboardDatePicker
                                                     margin="normal"
                                                     format="dd/MM/yyyy"
-                                                    value={this.state.returningDate}
+                                                    value={this.state.vacation.toDate}
                                                     onChange={this.updateReturningDate}
                                                     KeyboardButtonProps={{
                                                         'aria-label': 'change date',

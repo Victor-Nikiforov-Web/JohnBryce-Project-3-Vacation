@@ -60,7 +60,6 @@ async function updateVacation(vacation) {
 }
 
 async function getAllFollowedVacations() {
-    console.log('xxx')
     const sql = 'SELECT * FROM savedvacations';
     const vacations = await dal.executeAsync(sql);
     return vacations;

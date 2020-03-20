@@ -20,7 +20,7 @@ if (!fs.existsSync('../Client/public/assets/images/vacations')) {
 server.use('/api/register', registerController);
 server.use('/api/login', loginController);
 server.use('/api/vacations', vacationController);
-server.use('/api/image-uplode',imageUplodeController);
+server.use('/api/image-uplode', imageUplodeController);
 
 
 server.listen(3000, () => console.log('server is online'));
