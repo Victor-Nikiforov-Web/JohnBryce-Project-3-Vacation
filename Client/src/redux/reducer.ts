@@ -2,13 +2,6 @@ import { AppState } from "./app-state";
 import { Action } from "./action";
 import { ActionType } from "./action-type";
 
-// Reducer - פונקציה המבצעת את הפעולה הדרושה על המידע
-// פונקציה זו צריכה לקבל שני פרמטרים:
-// AppState-פרמטר ראשון - אובייקט ה
-// Action-פרמטר שני - אובייקט ה
-// שנשלח אליה AppState-אבל - אסור לפונקציה לשנות את ה
-// חדש, לשנות אותו ולהחזיר אותו AppState לכן היא חייבת לייצר
-
 export function reducer(oldState: AppState, action: Action): AppState {
 
     const newState = { ...oldState };
