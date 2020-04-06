@@ -4,6 +4,7 @@ const vacationLogic = require('../business-logic/vacation-logic');
 const jwtLogic = require('../business-logic/jwt-logic');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const uuid = require('uuid');
 
 router.get('/', async (request, response) => {
     try {
@@ -64,7 +65,16 @@ router.post('/new-vacation', jwtLogic.verifyToken, async (request, response) => 
                 throw "Error !"
             }
         });
-        const vacation = request.body;
+        if (!request.files) {
+            response.status(400).send('No File Sent !');
+            return;
+        }
+        const vacation = JSON.parse(request.body.vacation);
+        const file = request.files.image;
+        const randomName = uuid.v4();
+        const extension = file.name.substr(file.name.lastIndexOf('.'));
+        file.mv('../Client/public/assets/images/vacations/' + randomName + extension);
+        vacation.image = randomName + extension;
         const newVacation = await vacationLogic.addNewVacation(vacation);
         response.status(201).json(newVacation);
     } catch (error) {
@@ -79,8 +89,9 @@ router.delete('/delete-vacation', jwtLogic.verifyToken, async (request, response
                 throw "Error !"
             }
         });
+
         const vacation = request.body;
-        fs.unlinkSync(`../Client/public/assets/images/vacations/${vacation.image}`)
+        fs.unlinkSync(`../Client/public/assets/images/vacations/${vacation.image}`);
         await vacationLogic.deleteVacation(vacation.vacationID);
         response.sendStatus(204);
     } catch (error) {
@@ -95,15 +106,23 @@ router.put('/update-vacation', jwtLogic.verifyToken, async (request, response) =
                 throw "Error !"
             }
         });
-        const vacation = request.body;
+        const randomName = uuid.v4();
+        const vacation = JSON.parse(request.body.vacation);
+        if (request.files) {
+            const file = request.files.image;
+            fs.unlinkSync(`../Client/public/assets/images/vacations/${vacation.image}`);
+            const extension = file.name.substr(file.name.lastIndexOf('.'));
+            file.mv('../Client/public/assets/images/vacations/' + randomName + extension);
+            vacation.image = randomName + extension;
+        }
+
         const updatedVacation = await vacationLogic.updateVacation(vacation);
+        response.json(updatedVacation);
 
         if (updatedVacation === null) {
             response.sendStatus(404);
             return;
         }
-
-        response.json(updatedVacation);
     } catch (error) {
         response.status(500).send(error);
     }

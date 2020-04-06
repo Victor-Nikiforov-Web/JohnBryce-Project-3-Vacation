@@ -6,7 +6,6 @@ const fs = require('fs');
 const registerController = require('./controller/register-controller');
 const loginController = require('./controller/login-controller');
 const vacationController = require('./controller/vacation-controller');
-const imageUplodeController = require('./controller/image-uplode-controller');
 
 server.use(fileUpload());
 server.use(express.static(__dirname));
@@ -20,7 +19,6 @@ if (!fs.existsSync('../Client/public/assets/images/vacations')) {
 server.use('/api/register', registerController);
 server.use('/api/login', loginController);
 server.use('/api/vacations', vacationController);
-server.use('/api/image-uplode', imageUplodeController);
 
 
 server.listen(3000, () => console.log('server is online'));

@@ -21,6 +21,7 @@ interface AddVacationState {
     vacation: VacationModel;
     user: UserModel;
     imgToDisplay: string;
+    newImage: any;
 }
 export class EditVacation extends Component<any, AddVacationState> {
     private unsubscribeStore: Unsubscribe;
@@ -30,7 +31,8 @@ export class EditVacation extends Component<any, AddVacationState> {
         this.state = {
             imgToDisplay: '',
             user: store.getState().user,
-            vacation: new VacationModel()
+            vacation: new VacationModel(),
+            newImage: ''
         }
 
         this.unsubscribeStore = store.subscribe(() => {
@@ -105,31 +107,9 @@ export class EditVacation extends Component<any, AddVacationState> {
     }
     private checkImage = (event: any) => {
         const image = event.target.files[0];
-        const vacation = { ...this.state.vacation };
-        vacation.image = image;
-        this.setState({ vacation });
+        this.setState({ newImage: image });
     }
 
-    private uplodeImg = async () => {
-        const vacation = { ...this.state.vacation };
-        return new Promise((resolve, reject) => {
-            const formData = new FormData();
-            formData.append('image', vacation.image);
-
-            const optionsImg = {
-                method: "POST",
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
-                },
-                body: formData
-            };
-
-            fetch('http://localhost:3000/api/image-uplode', optionsImg)
-                .then(res => res.json())
-                .then(image => resolve(image))
-                .catch(err => reject(err))
-        });
-    }
 
     private checkForm = async () => {
         const vacation = { ...this.state.vacation };
@@ -152,40 +132,29 @@ export class EditVacation extends Component<any, AddVacationState> {
             alert('Departing date cant be the same as returning date');
             return;
         }
-        if (!vacation.image) {
-            alert('You need to uplode image !');
-            return;
-        }
+
         if (vacation.description === undefined || vacation.destination === undefined ||
             vacation.fromDate === undefined || vacation.fromDate === null ||
             vacation.toDate === undefined || vacation.toDate === null || vacation.price === undefined) {
             alert('please fix all inputs / enter valid values .');
             return;
         }
-        // if user uplode new image
-        if (typeof vacation.image !== typeof "") {
-            await this.uplodeImg()
-                .then(image => {
-                    vacation.image = image.toString();
-                    this.setState({ vacation });
-                    this.sendForm();
-                })
-                .catch(err => alert(err));
-            return;
-        }
-        //if not send only form
+
         this.sendForm();
     }
 
     private sendForm = () => {
+        const vacation = { ...this.state.vacation };
+        const formData = new FormData();
+        formData.append('image', this.state.newImage)
+        formData.append('vacation', JSON.stringify(vacation))
+
         const options = {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem('token')
             },
-            body: JSON.stringify({ ...this.state.vacation })
+            body: formData
         };
 
         fetch('http://localhost:3000/api/vacations/update-vacation', options)

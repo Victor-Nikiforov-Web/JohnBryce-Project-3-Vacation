@@ -42,7 +42,7 @@ export class AddVacation extends Component<any, AddVacationState> {
 
     public componentDidMount = () => {
         const vacation = { ...this.state.vacation };
-        //for validation becuase the time the same date when i try to use === return false .
+        //for validation of date , same date return false when equale.
         const date = new Date();
         date.setHours(0, 0, 0);
         vacation.fromDate = date;
@@ -119,27 +119,6 @@ export class AddVacation extends Component<any, AddVacationState> {
         this.setState({ vacation });
     }
 
-    private uplodeImg = async () => {
-        const vacation = { ...this.state.vacation };
-        return new Promise((resolve, reject) => {
-            const formData = new FormData();
-            formData.append('image', vacation.image);
-
-            const optionsImg = {
-                method: "POST",
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token')
-                },
-                body: formData
-            };
-
-            fetch('http://localhost:3000/api/image-uplode', optionsImg)
-                .then(res => res.json())
-                .then(image => resolve(image))
-                .catch(err => reject(err))
-        });
-    }
-
     private checkForm = async () => {
         const vacation = { ...this.state.vacation };
         // validation
@@ -161,24 +140,21 @@ export class AddVacation extends Component<any, AddVacationState> {
             alert('please fix all inputs / enter valid values .');
             return;
         }
-        await this.uplodeImg()
-            .then(image => {
-                vacation.image = image.toString();
-                this.setState({ vacation });
-                this.sendForm();
-            })
-            .catch(err => alert(err));
+        this.sendForm();
     }
 
     private sendForm = () => {
+        const vacation = { ...this.state.vacation }
+        const formData = new FormData();
+        formData.append('image', vacation.image);
+        formData.append('vacation' , JSON.stringify(vacation))
+
         const options = {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
                 "Authorization": "Bearer " + localStorage.getItem('token')
             },
-            body: JSON.stringify({ ...this.state.vacation })
+            body: formData
         };
 
         fetch('http://localhost:3000/api/vacations/new-vacation', options)
@@ -195,6 +171,7 @@ export class AddVacation extends Component<any, AddVacationState> {
             })
             .catch(err => alert(err));
     }
+    
     public render(): JSX.Element {
         return (
             <div className='addVacation'>
