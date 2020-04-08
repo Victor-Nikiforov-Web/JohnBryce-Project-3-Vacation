@@ -9,24 +9,27 @@ import { store } from "../../redux/store";
 import { Action } from "../../redux/action";
 import { ActionType } from "../../redux/action-type";
 import { Unsubscribe } from "redux";
+import io from 'socket.io-client';
 
 interface HomeState {
     vacations: VacationModel[];
     user: UserModel;
     isLogin: boolean;
     followedVacations: VacationModel[];
+    msg: string;
 }
 
 export class Home extends Component<any, HomeState> {
     private unsubscribeStore: Unsubscribe;
-
+    private socket = io.connect("http://localhost:3000");
     public constructor(props: any) {
         super(props);
         this.state = {
             vacations: store.getState().vacations,
             user: store.getState().user,
             isLogin: store.getState().isLogin,
-            followedVacations: store.getState().followedVacations
+            followedVacations: store.getState().followedVacations,
+            msg: ''
         };
 
         this.unsubscribeStore = store.subscribe(() => {
@@ -53,6 +56,13 @@ export class Home extends Component<any, HomeState> {
                 })
                 .catch(err => alert(err));
         }
+        this.socket.on("get-all-vacations", (vacations: VacationModel[]) => {
+            const action: Action = {
+                type: ActionType.getAllVacations,
+                payload: vacations
+            };
+            store.dispatch(action);
+        });
         // state in ComponentDidMount return undefind so i set Timeout
         setTimeout(() => {
             this.checkFollowedVacations();
@@ -66,7 +76,7 @@ export class Home extends Component<any, HomeState> {
             // if user log in update component
             if (this.state.isLogin === true) {
                 this.arrangeVacations();
-            } 
+            }
         }
     }
 
@@ -89,17 +99,17 @@ export class Home extends Component<any, HomeState> {
         const allVacations = [...this.state.vacations];
         const followedVacations = [...this.state.followedVacations];
         // if user log out set all vacations follow false 
-        if(this.state.isLogin === false){
+        if (this.state.isLogin === false) {
             allVacations.map(v => v.follow = false);
         }
-        if(followedVacations.length !== 0){
+        if (followedVacations.length !== 0) {
             for (let i = 0; i < this.state.followedVacations.length; i++) {
                 const index = allVacations.findIndex((v) => v.vacationID === followedVacations[i].vacationID);
                 const vacation = allVacations[index];
                 vacation.follow = true;
                 allVacations.splice(index, 1);
                 allVacations.unshift(vacation);
-            }    
+            }
         }
         this.setState({ vacations: allVacations });
     }

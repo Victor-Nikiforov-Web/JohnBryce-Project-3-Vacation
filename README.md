@@ -14,6 +14,6 @@
 **React** - TypeScript ,Redux , Victory chart , Router , Material-ui .
 
 **NodeJS** - Express , Cors , Uuid , Express file upload ,
-JsonWebToken - for protect server side & AutoLogin .
+JsonWebToken - for protect server side & Auto-Login .
 
 **MySQL** - Database .

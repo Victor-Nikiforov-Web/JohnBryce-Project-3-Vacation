@@ -16,6 +16,7 @@ import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
+import io from 'socket.io-client';
 
 interface AddVacationState {
     vacation: VacationModel;
@@ -25,7 +26,7 @@ interface AddVacationState {
 }
 export class EditVacation extends Component<any, AddVacationState> {
     private unsubscribeStore: Unsubscribe;
-
+    private socket = io.connect("http://localhost:3000");
     public constructor(props: any) {
         super(props);
         this.state = {
@@ -42,6 +43,7 @@ export class EditVacation extends Component<any, AddVacationState> {
 
     public componentWillUnmount = () => {
         this.unsubscribeStore();
+        
     }
 
     public componentDidMount = () => {
@@ -168,8 +170,10 @@ export class EditVacation extends Component<any, AddVacationState> {
 
                 alert('vacation has been updated !');
                 this.props.history.push("/admin-panel");
+                this.socket.emit("get-all-vacations");
             })
             .catch(err => alert(err));
+
     }
     public render(): JSX.Element {
         return (
