@@ -15,5 +15,6 @@
 
 **NodeJS** - Express , Cors , Uuid , Express file upload ,
 JsonWebToken - for protect server side & Auto-Login .
+Socket IO - show vacation in real-time ,when admin make changes .
 
 **MySQL** - Database .
